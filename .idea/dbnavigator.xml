@@ -30,6 +30,18 @@
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="3b0de58b-2795-43b3-93f1-fd599a9391be">
       <console name="Connection" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 1" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 1" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 1" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 1" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 1" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 1" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 2" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 2" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 2" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 2" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 2" type="STANDARD" schema="mysql" session="Main" />
+      <console name="Connection 2" type="STANDARD" schema="mysql" session="Main" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">

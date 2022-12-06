@@ -1,16 +1,16 @@
 CREATE TABLE IF NOT EXISTS restapiproject.file_entity (
-id BIGINT NOT NULL,
+id BIGINT NOT NULL AUTO_INCREMENT,
 file_name VARCHAR(255),
 PRIMARY KEY (id));
 
 CREATE TABLE IF NOT EXISTS restapiproject.event_entity (
-id BIGINT NOT NULL,
+id BIGINT NOT NULL AUTO_INCREMENT,
 event_date DATETIME,
 file_id BIGINT,
 PRIMARY KEY (id));
 
 CREATE TABLE IF NOT EXISTS restapiproject.user_entity (
-id BIGINT NOT NULL,
+id BIGINT NOT NULL AUTO_INCREMENT,
 first_name VARCHAR(255),
 last_name VARCHAR(255),
 PRIMARY KEY (id));
@@ -29,5 +29,4 @@ ADD CONSTRAINT users_events_id_fk1 FOREIGN KEY (user_id) REFERENCES restapiproje
 
 ALTER TABLE restapiproject.users_events_entity
 ADD CONSTRAINT users_events_id_fk2 FOREIGN KEY (event_id) REFERENCES restapiproject.event_entity (id);
-
 
