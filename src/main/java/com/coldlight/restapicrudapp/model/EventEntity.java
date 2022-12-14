@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -21,10 +22,12 @@ public class EventEntity {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    @Column(name = "event_date")
-    private long date;
+    @Column(name = "created")
+    private Date date;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "file_id", nullable = true)
-    private FileEntity file;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+
 }

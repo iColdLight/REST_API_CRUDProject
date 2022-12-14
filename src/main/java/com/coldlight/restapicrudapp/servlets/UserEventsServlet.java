@@ -1,8 +1,8 @@
 package com.coldlight.restapicrudapp.servlets;
 
 import com.coldlight.restapicrudapp.model.EventEntity;
-import com.coldlight.restapicrudapp.model.FileEntity;
-import com.coldlight.restapicrudapp.service.EventEntityService;
+import com.coldlight.restapicrudapp.model.UserEntity;
+import com.coldlight.restapicrudapp.service.UserEntityService;
 import com.google.gson.Gson;
 
 import javax.servlet.annotation.WebServlet;
@@ -13,21 +13,24 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-@WebServlet(urlPatterns = "/events")
-public class EventsServlet extends HttpServlet {
-    private final EventEntityService eventEntityService =new EventEntityService();
+@WebServlet(urlPatterns = "/user/events")
+public class UserEventsServlet extends HttpServlet {
+    private final UserEntityService userEntityService = new UserEntityService();
     private final Gson gson = new Gson();
 
-    //Get All Events Method
+
+    //Get Event by UserID Method
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        List<EventEntity> allEvents = eventEntityService.getAllEvents();
+        String userIDString = req.getParameter("userID");
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
-        if(allEvents != null){
-            String eventsJsonString = this.gson.toJson(allEvents);
-            out.print(eventsJsonString);
+        if(userIDString != null){
+            List<EventEntity> allEventsByUserID = userEntityService.getAllEventsByUserID(Long.valueOf(userIDString));
+            String events = this.gson.toJson(allEventsByUserID);
+            out.print(events);
+            out.print(events);
             out.flush();
         }else{
             System.out.println("error");

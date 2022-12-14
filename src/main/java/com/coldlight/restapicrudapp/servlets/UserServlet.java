@@ -75,12 +75,6 @@ public class UserServlet extends HttpServlet {
 
     private UserEntity getUserByID(String userIDString){
         Long userID = Long.valueOf(userIDString);
-        return userEntityService.getUserByID(userID);
+        return userEntityService.getEverythingUserByID(userID);
     }
-
-
-
-
-
-
 }

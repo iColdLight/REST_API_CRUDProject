@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -28,10 +29,18 @@ public class UserEntity {
     @Column(name = "last_name")
     private String lastName;
 
+    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "users_events_entity",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "event_id"))
-    private List<EventEntity> events;
+    private List<EventEntity> events = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "users_files_entity",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "file_id"))
+    private List<FileEntity> files = new ArrayList<>();
 
 }

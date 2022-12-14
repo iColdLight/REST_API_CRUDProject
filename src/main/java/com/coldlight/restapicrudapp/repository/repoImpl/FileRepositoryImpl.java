@@ -22,12 +22,12 @@ public class FileRepositoryImpl implements FileEntityRepository {
 
     @Override
     public FileEntity getByID(Long id) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        FileEntity fileEntity = session.get(FileEntity.class, id);
-        transaction.commit();
-        session.close();
-        return fileEntity;
+            Session session = HibernateUtils.getSessionFactory().openSession();
+            Transaction transaction = session.beginTransaction();
+            FileEntity fileEntity = session.get(FileEntity.class, id);
+            transaction.commit();
+            session.close();
+            return fileEntity;
     }
 
     @Override
