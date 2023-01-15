@@ -1,4 +1,4 @@
-package com.coldlight.restapicrudapp.model;
+package com.coldlight.restapicrudapp.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "file_entity")
+@Table(name = "files")
 @SQLDelete(sql = "update file_entity set deleted=true where id=?")
 @Where(clause = "deleted = false")
 public class FileEntity {
@@ -30,13 +31,22 @@ public class FileEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "file_path")
+    private String filePath;
+
+    @Column(name = "pay_load")
+    private Blob payLoad;
+
     @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "files_events_entity",
-            joinColumns = @JoinColumn(name = "file_id"),
-            inverseJoinColumns = @JoinColumn(name = "event_id"))
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "file", fetch = FetchType.LAZY)
     private List<EventEntity> events = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
     @Column(name = "deleted", nullable = false)
     private Boolean deleted = false;
+
+
 }

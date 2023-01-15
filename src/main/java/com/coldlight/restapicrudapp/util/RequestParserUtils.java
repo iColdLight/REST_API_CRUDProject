@@ -23,6 +23,9 @@ public class RequestParserUtils {
         return (JSONObject) JSONValue.parse(jb.toString());
     }
 
+    /*public static JSONObject parseHttpFileRequest(HttpServletRequest req){
+
+    }*/
     private static void removeBlankSpace(StringBuilder sb) {
         int j = 0;
         for (int i = 0; i < sb.length(); i++) {

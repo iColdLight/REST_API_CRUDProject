@@ -1,4 +1,4 @@
-package com.coldlight.restapicrudapp.model;
+package com.coldlight.restapicrudapp.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "event_entity")
+@Table(name = "events")
 public class EventEntity {
 
     @Id
@@ -22,6 +22,7 @@ public class EventEntity {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created")
     private Date date;
 
@@ -29,5 +30,11 @@ public class EventEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
+    @ManyToOne
+    @JoinColumn(name = "file_id")
+    private FileEntity file;
 }
