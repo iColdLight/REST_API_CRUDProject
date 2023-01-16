@@ -3,15 +3,23 @@ package service;
 import com.coldlight.restapicrudapp.entity.FileEntity;
 import com.coldlight.restapicrudapp.repository.hibernate.HibernateFileRepositoryImpl;
 import com.coldlight.restapicrudapp.service.FileService;
+import com.coldlight.restapicrudapp.util.HibernateUtils;
+import org.hibernate.Hibernate;
+import org.hibernate.Session;
+import org.hibernate.engine.jdbc.LobCreator;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +29,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(value = {Hibernate.class, HibernateUtils.class})
 public class FileServiceTest {
 
     @Mock
@@ -31,7 +40,19 @@ public class FileServiceTest {
     private FileService fileService;
 
     @Captor
-    ArgumentCaptor<FileEntity> fileEntityArgumentCaptor;
+    private ArgumentCaptor<FileEntity> fileEntityArgumentCaptor;
+
+    private LobCreator mockLobCreator;
+
+    @Before
+    public void init(){
+        Session mockSession = PowerMockito.mock(Session.class);
+        mockLobCreator = PowerMockito.mock(LobCreator.class);
+        PowerMockito.mockStatic(HibernateUtils.class);
+        PowerMockito.when(HibernateUtils.getSession()).thenReturn(mockSession);
+        PowerMockito.mockStatic(Hibernate.class);
+        PowerMockito.when(Hibernate.getLobCreator(mockSession)).thenReturn(mockLobCreator);
+    }
 
     @Test
     public void createFileTest() {
@@ -39,10 +60,13 @@ public class FileServiceTest {
         String fileName = "Family Image";
         byte[] payload = new byte[124];
         FileEntity file = new FileEntity();
+        Blob blob = new com.mysql.cj.jdbc.Blob(payload, null);
         file.setName(fileName);
+        file.setPayLoad(blob);
 
 
         //when
+        when(mockLobCreator.createBlob(payload)).thenReturn(blob);
         when(hibernateFileRepository.save(file)).thenReturn(file);
 
         //then

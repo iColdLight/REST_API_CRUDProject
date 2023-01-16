@@ -23,6 +23,8 @@
         <gson.version>2.9.0</gson.version>
         <json.version>1.1</json.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <powermockjunit.version>2.0.9</powermockjunit.version>
+        <powermockmockito.version>1.7.0</powermockmockito.version>
     </properties>
 
     <dependencies>
@@ -74,6 +76,18 @@
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>${json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermockjunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermockmockito.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
