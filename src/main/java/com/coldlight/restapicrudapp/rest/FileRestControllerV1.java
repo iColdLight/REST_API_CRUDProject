@@ -1,9 +1,7 @@
 package com.coldlight.restapicrudapp.rest;
 
-import com.coldlight.restapicrudapp.entity.EventEntity;
 import com.coldlight.restapicrudapp.entity.FileEntity;
-import com.coldlight.restapicrudapp.entity.Status;
-import com.coldlight.restapicrudapp.entity.UserEntity;
+import com.coldlight.restapicrudapp.repository.hibernate.HibernateEventRepositoryImpl;
 import com.coldlight.restapicrudapp.repository.hibernate.HibernateFileRepositoryImpl;
 import com.coldlight.restapicrudapp.repository.hibernate.HibernateUserRepositoryImpl;
 import com.coldlight.restapicrudapp.service.EventService;
@@ -17,7 +15,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -31,20 +28,20 @@ import java.util.Optional;
 )
 public class FileRestControllerV1 extends HttpServlet {
 
-    private final UserService userService = new UserService(new HibernateUserRepositoryImpl());
-    private final FileService fileService = new FileService(new HibernateFileRepositoryImpl());
-    private final EventService eventService = new EventService();
+    private final FileService fileService = new FileService(
+            new HibernateFileRepositoryImpl(),
+            new UserService(new HibernateUserRepositoryImpl()),
+            new EventService(new HibernateEventRepositoryImpl())) {};
+
     private final Gson gson = new Gson();
+    private static final String MY_AWS_S3_BUCKET = "us-east-1/mys3-bucket/";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Part filePart = req.getPart("file");
-        byte[] fileBytes = filePart.getInputStream().readAllBytes();
+        String fileName = req.getPart("file").getSubmittedFileName();
+        String filePath = MY_AWS_S3_BUCKET+fileName;
         String userID = req.getParameter("userID");
-        UserEntity userByID = getUserByID(userID);
-        String submittedFileName = filePart.getSubmittedFileName();
-        EventEntity event = eventService.createEvent(Status.CREATED);
-        fileService.createFile(submittedFileName, "filePath", event, userByID, fileBytes);
+        fileService.createFile(fileName, filePath, Long.parseLong(userID));
     }
 
     @Override
@@ -77,13 +74,7 @@ public class FileRestControllerV1 extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String fileID = req.getParameter("fileID");
-        EventEntity event = eventService.createEvent(Status.DELETED);
-        fileService.deleteFileByID(Long.parseLong(fileID), event);
-    }
-
-    private UserEntity getUserByID(String userIDString){
-        Long userID = Long.valueOf(userIDString);
-        return userService.getUserByID(userID);
+        fileService.deleteFileByID(Long.parseLong(fileID));
     }
 
     private FileEntity getFileByID(String fileIDString){

@@ -3,31 +3,34 @@ package com.coldlight.restapicrudapp.service;
 
 import com.coldlight.restapicrudapp.entity.EventEntity;
 import com.coldlight.restapicrudapp.entity.FileEntity;
+import com.coldlight.restapicrudapp.entity.Status;
 import com.coldlight.restapicrudapp.entity.UserEntity;
 import com.coldlight.restapicrudapp.repository.FileRepository;
-import com.coldlight.restapicrudapp.util.HibernateUtils;
-import org.hibernate.Hibernate;
+import lombok.RequiredArgsConstructor;
 
-import java.sql.Blob;
+import java.util.Date;
 import java.util.List;
 
+@RequiredArgsConstructor
 public class FileService {
     private final FileRepository fileRepository;
+    private final UserService userService;
+    private final EventService eventService;
 
-    public FileService(FileRepository fileRepository) {
-        this.fileRepository = fileRepository;
-    }
-
-    public FileEntity createFile(String name, String filePath, EventEntity event, UserEntity user, byte[] payload) {
-        Blob blob = Hibernate.getLobCreator(HibernateUtils.getSession()).createBlob(payload);
+    public FileEntity createFile(String name, String filePath, Long userId) {
+        UserEntity user = userService.getUserByID(userId);
         FileEntity fileEntity = FileEntity.builder()
                 .name(name)
                 .filePath(filePath)
-                .events(List.of(event))
-                .user(user)
-                .payLoad(blob)
                 .build();
-        return fileRepository.save(fileEntity);
+        FileEntity createdFileEntity = fileRepository.save(fileEntity);
+        EventEntity eventEntity = new EventEntity();
+        eventEntity.setFile(fileEntity);
+        eventEntity.setUser(user);
+        eventEntity.setStatus(Status.CREATED);
+        eventEntity.setDate(new Date());
+        eventService.save(eventEntity);
+        return createdFileEntity;
     }
 
     public List<FileEntity> getAllFiles() {
@@ -38,12 +41,16 @@ public class FileService {
         return fileRepository.getByID(id);
     }
 
-    public void deleteFileByID(Long id, EventEntity event) {
+    public void deleteFileByID(Long id) {
         FileEntity fileEntity = fileRepository.getByID(id);
         if (fileEntity == null) {
             throw new RuntimeException("File with ID = " + id + "not found");
         }
-        fileEntity.getEvents().add(event);
+        EventEntity eventEntity = new EventEntity();
+        eventEntity.setFile(fileEntity);
+        eventEntity.setStatus(Status.DELETED);
+        eventEntity.setDate(new Date());
+        fileEntity.getEvents().add(eventEntity);
         fileRepository.delete(fileEntity);
     }
 }

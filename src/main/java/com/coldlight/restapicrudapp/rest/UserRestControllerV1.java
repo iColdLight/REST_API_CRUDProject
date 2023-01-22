@@ -84,6 +84,6 @@ public class UserRestControllerV1 extends HttpServlet {
 
     private UserEntity getUserByID(String userIDString) {
         Long userID = Long.valueOf(userIDString);
-        return userService.getUserWithFilesAndEventsByID(userID);
+        return userService.getUserWithEventsByID(userID);
     }
 }

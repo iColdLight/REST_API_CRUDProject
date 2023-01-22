@@ -2,20 +2,28 @@ package com.coldlight.restapicrudapp.service;
 
 
 import com.coldlight.restapicrudapp.entity.EventEntity;
-import com.coldlight.restapicrudapp.entity.Status;
 import com.coldlight.restapicrudapp.repository.EventRepository;
-import com.coldlight.restapicrudapp.repository.hibernate.HibernateEventRepositoryImpl;
 
-import java.util.Date;
+import java.util.List;
 
 public class EventService {
 
-    private final EventRepository eventRepository = new HibernateEventRepositoryImpl();
+    private final EventRepository eventRepository;
 
-    public EventEntity createEvent(Status status) {
-        return EventEntity.builder()
-                .date(new Date())
-                .status(status)
-                .build();
+    public EventService(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
     }
+
+    public EventEntity save(EventEntity eventEntity) {
+        return eventRepository.save(eventEntity);
+    }
+
+    public List<EventEntity> getAllEvents() {
+        return eventRepository.getAll();
+    }
+
+    public EventEntity getEventByID(Long id) {
+        return eventRepository.getByID(id);
+    }
+
 }

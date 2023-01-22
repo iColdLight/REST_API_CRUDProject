@@ -29,11 +29,6 @@ public class UserEntity {
     @ToString.Exclude
     @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
-    private List<FileEntity> files = new ArrayList<>();
-
-    @ToString.Exclude
-    @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<EventEntity> events = new ArrayList<>();
 
 }

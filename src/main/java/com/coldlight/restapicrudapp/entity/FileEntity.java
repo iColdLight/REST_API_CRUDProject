@@ -34,16 +34,9 @@ public class FileEntity {
     @Column(name = "file_path")
     private String filePath;
 
-    @Column(name = "pay_load")
-    private Blob payLoad;
-
     @Builder.Default
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "file", fetch = FetchType.LAZY)
     private List<EventEntity> events = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
 
     @Column(name = "deleted", nullable = false)
     private Boolean deleted = false;

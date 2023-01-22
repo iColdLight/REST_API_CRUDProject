@@ -12,23 +12,20 @@ public class HibernateFileRepositoryImpl implements FileRepository {
     @Override
     public List<FileEntity> getAll() {
         try (Session session = HibernateUtils.getSession()) {
-            List<FileEntity> fileEntityList;
-            fileEntityList = session.createQuery("""
+            return session.createQuery("""
                     select distinct f from FileEntity f
                     left join fetch f.events e
                     """, FileEntity.class).getResultList();
-            return fileEntityList;
         }
     }
 
     @Override
     public FileEntity getByID(Long id) {
         try (Session session = HibernateUtils.getSession()) {
-            FileEntity fileEntity = session.createQuery("""
+            return session.createQuery("""
                     select distinct f from FileEntity f
                     left join fetch f.events e
                     where f.id = :id""", FileEntity.class).setParameter("id", id).getSingleResult();
-            return fileEntity;
         }
     }
 

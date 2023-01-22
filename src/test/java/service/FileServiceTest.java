@@ -19,7 +19,6 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,27 +53,22 @@ public class FileServiceTest {
         PowerMockito.when(Hibernate.getLobCreator(mockSession)).thenReturn(mockLobCreator);
     }
 
-    @Test
+   @Test
     public void createFileTest() {
         //given
         String fileName = "Family Image";
-        byte[] payload = new byte[124];
         FileEntity file = new FileEntity();
-        Blob blob = new com.mysql.cj.jdbc.Blob(payload, null);
         file.setName(fileName);
-        file.setPayLoad(blob);
 
 
         //when
-        when(mockLobCreator.createBlob(payload)).thenReturn(blob);
         when(hibernateFileRepository.save(file)).thenReturn(file);
 
         //then
-        assertEquals(file, fileService.createFile(fileName, "filePath", null, null, payload));
-
+        assertEquals(file, fileService.createFile(fileName, "filePath", null));
     }
 
-    @Test(expected = RuntimeException.class)
+   @Test(expected = RuntimeException.class)
     public void createFileExceptionTest() {
         //given
         String fileName = "Family Image";
@@ -85,7 +79,7 @@ public class FileServiceTest {
         when(hibernateFileRepository.save(file)).thenThrow(new RuntimeException());
 
         //then
-        fileService.createFile(fileName, "filePath", null, null, null);
+        fileService.createFile(fileName, "filePath", null);
     }
 
     @Test
@@ -181,7 +175,7 @@ public class FileServiceTest {
         when(hibernateFileRepository.getByID(any())).thenReturn(null);
 
         //then
-        fileService.deleteFileByID(1L, null);
+        fileService.deleteFileByID(1L);
     }
 
     @Test
@@ -200,7 +194,7 @@ public class FileServiceTest {
 
 
         //then
-        fileService.deleteFileByID(1L, null);
+        fileService.deleteFileByID(1L);
         Assert.assertEquals(1L, fileEntityArgumentCaptor.getValue().getId());
     }
 }

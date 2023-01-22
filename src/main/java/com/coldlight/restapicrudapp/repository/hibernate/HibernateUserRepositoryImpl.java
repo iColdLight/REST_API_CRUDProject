@@ -13,40 +13,27 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     @Override
     public List<UserEntity> getAll() {
         try (Session session = HibernateUtils.getSession()) {
-            List<UserEntity> userEntityList;
-            userEntityList = session.createQuery("""
-                    select distinct u from UserEntity u
-                    left join fetch u.files f
-                    """, UserEntity.class).getResultList();
-            userEntityList = session.createQuery("""
+            return session.createQuery("""
                     select distinct u from UserEntity u
                     left join fetch u.events e
-                    where u in :userEntityList
-                    """, UserEntity.class).setParameter("userEntityList", userEntityList).getResultList();
-            return userEntityList;
+                    """, UserEntity.class).getResultList();
         }
     }
 
     @Override
     public UserEntity getUserWithFilesAndEventsByID(Long id) {
         try (Session session = HibernateUtils.getSession()) {
-            UserEntity userEntity = session.createQuery("""
-                    select distinct u from UserEntity u
-                    left join fetch u.files f 
-                    where u.id = :id""", UserEntity.class).setParameter("id", id).getSingleResult();
-            userEntity = session.createQuery("""
+            return session.createQuery("""
                     select distinct u from UserEntity u
                     left join fetch u.events e
-                    where u = :user""", UserEntity.class).setParameter("user", userEntity).getSingleResult();
-            return userEntity;
+                    where u.id = :id""", UserEntity.class).setParameter("id", id).getSingleResult();
         }
     }
 
     @Override
     public UserEntity getByID(Long id) {
         try (Session session = HibernateUtils.getSession()) {
-            UserEntity userEntity = session.get(UserEntity.class, id);
-            return userEntity;
+            return session.get(UserEntity.class, id);
         }
     }
 

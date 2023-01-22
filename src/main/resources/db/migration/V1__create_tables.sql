@@ -8,10 +8,7 @@ create TABLE IF NOT EXISTS restapiproject.files (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     file_path VARCHAR(255),
-    deleted BOOLEAN,
-    pay_load LONGBLOB,
-    user_id BIGINT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    deleted BOOLEAN
 );
 
 create TABLE IF NOT EXISTS restapiproject.events (

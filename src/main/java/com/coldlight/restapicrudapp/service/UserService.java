@@ -13,7 +13,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-
     public UserEntity createUser(String firstName, String lastName) {
         UserEntity userEntity = UserEntity.builder()
                 .firstName(firstName)
@@ -30,7 +29,7 @@ public class UserService {
         return userRepository.getByID(id);
     }
 
-    public UserEntity getUserWithFilesAndEventsByID(Long id) {
+    public UserEntity getUserWithEventsByID(Long id) {
         return userRepository.getUserWithFilesAndEventsByID(id);
     }
 
